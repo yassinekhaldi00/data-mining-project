@@ -71,9 +71,18 @@ wordFreq <- sort(rowSums(m), decreasing=TRUE)
 # colors
 pal <- brewer.pal(9, "BuGn")
 pal <- pal[-(1:4)]
+
 # word cloud
 set.seed(375) # to make it reproducible
 grayLevels <- gray( (wordFreq+10) / (max(wordFreq)+10) )
 wordcloud(words=names(wordFreq), freq=wordFreq, min.freq=3, random.order=F,colors=pal)
 
+#Clustering Words
+tdm2 <- removeSparseTerms(tdm, sparse=0.95)
+m2 <- as.matrix(tdm2)
+distMatrix <- dist(scale(m2))
+fit <- hclust(distMatrix, method="ward.D")
+plot(fit)
+rect.hclust(fit, k=10)
+groups <- cutree(fit, k=10)
 
